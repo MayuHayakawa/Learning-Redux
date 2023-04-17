@@ -24,6 +24,19 @@ function rootReducer(state = initialState, action) {
                     }
                 })
             }
+        case 'UPDATE_TODO':
+            return {
+                todos: state.todos.map(todo => {
+                    if(todo.id === action.payload.id) {
+                        return {
+                            ...todo,
+                            text: action.payload.text,
+                        }
+                    } else {
+                        return todo
+                    }
+                })
+            }
         default:
             return state;
     }

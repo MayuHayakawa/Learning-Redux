@@ -1,0 +1,15 @@
+.todo{
+    border: 1px solid #dedede1f;
+    border-radius: 6px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* gap: 12px; */
+    padding: 1rem 2rem;
+    margin: 1rem 0;
+}
+  
+.completed-todo{
+    text-decoration: line-through;
+}

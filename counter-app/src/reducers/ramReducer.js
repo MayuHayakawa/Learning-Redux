@@ -1,5 +1,8 @@
 const initialState = {
     characters: [],
+    locations: [],
+    isLoading: false,
+    error: null
 }
 
 function ramReducer(state = initialState, action) {
@@ -9,7 +12,69 @@ function ramReducer(state = initialState, action) {
         case "FETCH_DATA":
             return {
                 ...state,
-                characters: action.payload.data
+                isLoading: true,
+            }
+        case "FETCH_CHARACTER_DATA_SUCCESSFULL": //all data's isFavotire become true...?
+            const favoriteCharacters = JSON.parse(localStorage.getItem("favoriteCharacters")) || [];
+            console.log("aaa");
+            console.log(favoriteCharacters);
+            const updatedCharacters = action.payload.data.map(character => {
+                const favoriteCharacter = favoriteCharacters.find((favorite) => 
+                    favorite.id === character.id
+                );
+                return favoriteCharacter ? {...character, isFavorite: true } : character
+            });
+
+            return {
+                ...state,
+                isLoading: false,
+                characters: updatedCharacters
+            }
+        case "FETCH_LOCATION_DATA_SUCCESSFULL": //all data's isFavotire become true...?
+            const favoriteLocations = JSON.parse(localStorage.getItem("favoriteLocations")) || [];
+            const updatedLocations = action.payload.data.map(location => {
+                const favoriteLocation = favoriteLocations.find((favorite) =>
+                    favorite.id === location.id
+                )
+                return favoriteLocation ? {...location, isFavorite: true } : location
+            })
+            return {
+                ...state,
+                isLoading: false,
+                locations: updatedLocations
+            }
+        case "FETCH_DATA_ERROR":
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload.error,
+            }
+        case "TOGGLE_FAVORITE_CHARACTER":
+            const updatedFavoriteCharacters = state.characters.map(character =>
+                character.id === action.payload.id
+                ? {...character, isFavorite: !character.isFavorite}
+                : character
+            );
+            console.log(updatedFavoriteCharacters);
+            localStorage.setItem("favoriteCharacters", JSON.stringify(updatedFavoriteCharacters));
+
+            return {
+                ...state,
+                characters: updatedFavoriteCharacters
+            }
+
+        case "TOGGLE_FAVORITE_LOCATION":
+            const updatedFavoriteLocations = state.locations.map(location =>
+                location.id === action.payload.id
+                ? {...location, isFavorite: !location.isFavorite}
+                : location
+            );
+            console.log(updatedFavoriteLocations);
+            localStorage.setItem("favoriteLocations", JSON.stringify(updatedFavoriteLocations));
+
+            return {
+                ...state,
+                locations: updatedFavoriteLocations
             }
         default:
             return state;

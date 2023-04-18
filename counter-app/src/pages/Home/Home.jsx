@@ -1,29 +1,97 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios';
-import { fetchCharacterData } from '../../actions/ramActions';
+import { fetchCharactersData, fetchLocationsData } from '../../actions/ramActions';
+import CharacterCard from '../../components/CharacterCard/CharacterCard';
+import LocationCard from '../../components/LocationCard/LocationCard';
+import styled from "styled-components";
+
+const HomeContainer = styled.div`
+  padding: 1rem 2rem;
+  text-align: center;
+  button {
+    width: 200px;
+    margin: 20px 0;
+    height: 32px;
+  }
+`;
+
+const CharacterSection = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+`;
+
+const LocationSection = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+`;
+
+const TitleSection = styled.div`
+  h2{
+    text-align: start;
+    font-size: 48px;
+  }
+  border-bottom: 2px solid white;
+  margin: 24px 0;
+`;
 
 const Home = () => {
+  const [ showMore, setShowMore ] = useState(false);
   const dispatch = useDispatch();
-  const characters = useSelector(state => state.ram.characters);
+  const characters = useSelector((state) => state.ram.characters);
+  const locations = useSelector((state) => state.ram.locations);
 
   useEffect(() => {
-    let res = axios.get("https://rickandmortyapi.com/api/character");
-    res.then(data => {
-      dispatch(fetchCharacterData(data.data.results))
-    })
+    if(characters.length === 0) {
+      dispatch(fetchCharactersData());
+    }
+    if(locations.length === 0) {
+      dispatch(fetchLocationsData());
+    }
   }, [dispatch])
 
+  console.log(characters);
+  console.log(locations);
+
   return (
-    <div>
-      {
-        characters.map(character => {
+    <HomeContainer>
+      <TitleSection>
+          <h2>Characters</h2>
+      </TitleSection>
+      <CharacterSection>
+        {showMore
+          ? characters.slice(0, 12).map((character) => {
+            return (
+              <CharacterCard 
+                key={character.id}
+                {...character}
+              />
+            );
+          })
+          : characters.slice(0, 6).map((character) => {
+            return (
+              <CharacterCard key={character.id} {...character}>
+              </CharacterCard>
+            );
+          })
+        }
+        <button onClick={() => setShowMore(!showMore)}>
+          {showMore ? "Show less" : "Show more"}
+        </button>
+      </CharacterSection>
+      <TitleSection>
+        <h2>Locations</h2>
+      </TitleSection>
+      <LocationSection>
+        { locations.map(location => {
           return (
-            <div key={character.id}>{character.name}</div>
-          )
-        })
-      }
-    </div>
+            <LocationCard key={location.id} {...location}>
+            </LocationCard>
+          );
+        })}
+      </LocationSection>
+    </HomeContainer>
   )
 }
 

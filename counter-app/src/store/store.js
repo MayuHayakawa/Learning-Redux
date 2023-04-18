@@ -12,7 +12,6 @@ const store = createStore(rootReducer, applyMiddleware(thunk));
 // const store = createStore(counterReducer);
 
 store.subscribe(() => {
-    console.log("a");
     localStorage.setItem("count", store.getState().count.count);
 })
 

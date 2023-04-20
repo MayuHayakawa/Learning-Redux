@@ -23,14 +23,11 @@ const TitleSection = styled.div`
   margin: 24px 0;
 `;
 
-
 const Favorite = () => {
   const favoriteCharacters = JSON.parse(localStorage.getItem("favoriteCharacters")) || [];
   const favoriteLocations = JSON.parse(localStorage.getItem("favoriteLocations")) || [];
   const favoriteCharactersArray = favoriteCharacters.filter((character) => character.isFavorite);
   const favoriteLocationsArray = favoriteLocations.filter((location) => location.isFavorite);
-
-
 
   return (
     <FavoriteContainer>

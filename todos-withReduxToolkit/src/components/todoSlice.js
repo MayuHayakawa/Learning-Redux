@@ -3,26 +3,34 @@ import { createSlice } from '@reduxjs/toolkit';
 const todoSlice = createSlice({
     name: "todo",
     initialState: {
-        todos: [],
-        // todo: {
-        //     id: "",
-        //     text: "",
-        //     completed: false
-        // },
+        todos: [
+            {
+                id: "",
+                text: "",
+                completed: false
+            }
+        ]
     },
     reducers: {
         addTodo: (state, action) => {
-            if(state.todos.length === 0) {
-                state.todos[0] = action.payload;
-            } else {
-                state.todos = [...state.todos, action.payload];
-            }
+            state.todos.push(action.payload);
+            // if(state.todos.length === 0) {
+            //     state.todos[0] = action.payload;
+            // } else {
+            //     state.todos = [...state.todos, action.payload];
+            // }
         },
         toggleTodo: (state, action) => {
             state.todos.map(todo => {
-                if(todo.id === action.payload) {
+                // console.log(state.todos)
+                // console.log(todo.id)
+                // console.log(action.payload)
+                if(todo.id === action.payload.id) {
+                    // console.log(todo.completed);
+                    // console.log(!todo.completed);
                     return{
-                        ...todo, completed: !todo.completed
+                        ...todo, 
+                        completed: !todo.completed
                     }
                 } else {
                     return todo
@@ -30,7 +38,7 @@ const todoSlice = createSlice({
             })
         },
         deleteTodo: (state, action) => {
-            state.todos = state.todos.filter(todo => todo.id != action.payload)
+            state.todos = state.todos.filter(todo => todo.id != action.payload.id)
         }
     }
 });

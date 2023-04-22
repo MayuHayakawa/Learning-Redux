@@ -21,7 +21,7 @@ const todoSlice = createSlice({
             // }
         },
         toggleTodo: (state, action) => {
-            state.todos.map(todo => {
+            const newTodos = state.todos.map(todo => {
                 // console.log(state.todos)
                 // console.log(todo.id)
                 // console.log(action.payload)
@@ -36,6 +36,7 @@ const todoSlice = createSlice({
                     return todo
                 }
             })
+            state.todos = newTodos;
         },
         deleteTodo: (state, action) => {
             state.todos = state.todos.filter(todo => todo.id != action.payload.id)
